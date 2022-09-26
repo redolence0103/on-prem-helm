@@ -5,7 +5,7 @@
 ---
 ### 2. Create & Connect GCP Cluster
 ---
-### 3. cd on-prem-helm
+### 3. on-prem 설치 
   - Cluseter ip: ```kubeclt cluseter-info```
   - Domain: Route53 도메인 중 사용할 도메인 
   - token: ```kubectl describe secret default```
