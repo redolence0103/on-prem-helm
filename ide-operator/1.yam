@@ -1,0 +1,2 @@
+cd config/manager && /usr/local/bin/kustomize edit set image controller=gcr.io/eventstorming-tool/theia-ide-lab:v45
+/usr/local/bin/kustomize build config/default | kubectl apply -f -

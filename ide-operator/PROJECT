@@ -1,0 +1,8 @@
+domain: org
+layout: helm.sdk.operatorframework.io/v1
+projectName: ide-operator
+resources:
+- group: uengine
+  kind: Ide
+  version: v1alpha1
+version: 3-alpha

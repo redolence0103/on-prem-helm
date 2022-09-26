@@ -1,0 +1,137 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Values.hashName }}
+  labels:
+    environment: labs
+    userId: {{ .Values.userId }}
+    app: {{ .Values.hashName }}
+spec:
+  securityContext:
+    runAsUser: 0
+    fsGroup: 0
+{{- if .Values.templateFile }}
+  initContainers:
+  - name: mkdir
+    image: gcr.io/eventstorming-tool/busybox
+    command:
+    - mkdir
+    - "-p"
+    - "/home/project/{{ .Values.course }}/classes/{{ .Values.clazz }}/labs/{{ .Values.userId | replace "_" "@" }}/{{ .Values.templateFile }}"
+    volumeMounts:
+    - mountPath: "/home/project"
+      name: test-storage
+      subPath: labs-{{ .Values.tenant }}
+  - name: mkdirzip
+    image: gcr.io/eventstorming-tool/busybox
+    command:
+    - mkdir
+    - "-p"
+    - "/home/project/{{ .Values.course }}/labs/{{ .Values.lab }}/"
+    volumeMounts:
+    - mountPath: "/home/project"
+      name: test-storage
+      subPath: labs-{{ .Values.tenant }}
+  - name: downloadzip
+    image: gcr.io/eventstorming-tool/busybox
+    command:
+    - wget
+    - "-O"
+    - "/home/project/{{ .Values.course }}/labs/{{ .Values.lab }}/{{ .Values.templateFile }}"
+    - {{ .Values.zipUrl }}
+    volumeMounts:
+    - mountPath: "/home/project"
+      name: test-storage
+      subPath: labs-{{ .Values.tenant }}
+  - name: unzip
+    image: gcr.io/eventstorming-tool/busybox
+    command:
+    - unzip
+    - "-n"
+    - "/home/project/{{ .Values.course }}/labs/{{ .Values.lab }}/{{ .Values.templateFile }}"
+    - "-d"
+    - "/home/project/{{ .Values.course }}/classes/{{ .Values.clazz }}/labs/{{ .Values.userId | replace "_" "@" }}/{{ .Values.lab }}"
+    volumeMounts:
+    - mountPath: "/home/project"
+      name: test-storage
+      subPath: labs-{{ .Values.tenant }}
+{{- else }}
+  initContainers:
+  - name: mkdir
+    image: gcr.io/eventstorming-tool/busybox
+    command:    
+    - mkdir
+    - "-p"
+    - "/home/project/{{ .Values.status }}/{{ .Values.course }}/classes/{{ .Values.clazz }}/labs/{{ .Values.userId | replace "_" "@" }}/{{ .Values.lab }}"
+    volumeMounts:
+    - mountPath: "/home/project"
+      name: test-storage
+      subPath: labs-{{ .Values.tenant }}
+  - name: makereadme
+    image: gcr.io/eventstorming-tool/busybox
+    command:
+    - touch
+    - readme.md
+    volumeMounts:
+    - mountPath: "/home/project"
+      name: test-storage
+      subPath: labs-{{ .Values.tenant }}
+{{- end }}
+  containers:
+  - name: {{ .Values.hashName }}
+    image: gcr.io/eventstorming-tool/theia-ide-full:v10.04
+    securityContext:
+      privileged: true
+    env:
+    - name: TENANT
+      value: {{ .Values.tenant }}
+    - name: COURSE
+      value: {{ .Values.course }}
+    - name: LABS
+      value: {{ .Values.lab }}
+    - name: CLAZZ
+      value: {{ .Values.clazz }}
+    - name: EMAIL
+      value: {{ .Values.userId | replace "_" "@" }}
+    - name: HASH
+      value: {{ .Values.hashName }}
+    - name: DOCKER_HOST
+      value: tcp://localhost:2375
+    - name: STATUS
+      value: {{ .Values.status }}
+    resources:
+      limits:
+        memory: {{ .Values.request.memory | default "6Gi" }}
+      requests:
+        cpu: {{ .Values.request.cpu | default 2 }}
+        memory: {{ .Values.request.memory | default "6Gi" }}    
+    volumeMounts:
+    - mountPath: "/root/.kube"
+      name: test-storage
+    #   subPath: "labs-eventstorming/uengine/classes/{{ .Values.clazz }}/userConfig/{{ .Values.userId | replace "_" "@" }}"
+      subPath: "labs-{{ .Values.tenant }}/{{ .Values.status }}/{{ .Values.course }}/classes/{{ .Values.clazz }}/userConfig/{{ .Values.userId | replace "_" "@" }}"
+    - mountPath: "/home/project"
+      name: test-storage
+    #   subPath: "labs-eventstorming/uengine/classes/users/labs/{{ .Values.userId | replace "_" "@" }}"
+      subPath: "labs-{{ .Values.tenant }}/{{ .Values.status }}/{{ .Values.course }}/classes/{{ .Values.clazz }}/labs/{{ .Values.userId | replace "_" "@" }}"
+    readinessProbe:
+      httpGet:
+        path: "/"
+        port: 3000
+      initialDelaySeconds: 10
+      periodSeconds: 5
+  - name: dind
+    image: gcr.io/eventstorming-tool/dind:v1
+    securityContext:
+      privileged: true
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 200m
+  volumes:
+  - name: test-storage
+    persistentVolumeClaim:
+      claimName: nfs
+  - name: docker-graph-storage
+    persistentVolumeClaim:
+      claimName: nfs

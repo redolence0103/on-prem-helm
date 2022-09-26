@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cors-demo
+data:
+  # 파일과 비슷한 키
+  cors.properties: |
+    http://www.msaez.io, http://www.msastudy.io, http://labs.msaez.io, http://www.msaez.io:8081, http://www.msastudy.io:8081, http://labs.msaez.io:8081

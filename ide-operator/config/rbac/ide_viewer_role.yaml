@@ -1,0 +1,20 @@
+# permissions for end users to view ides.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ide-viewer-role
+rules:
+- apiGroups:
+  - uengine.org
+  resources:
+  - ides
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - uengine.org
+  resources:
+  - ides/status
+  verbs:
+  - get

@@ -1,0 +1,19 @@
+apiVersion: uengine.org/v1alpha1
+kind: Ide
+metadata:
+  name: ide-sample
+spec:
+  hashName: "labs--680760739"
+  userId: "test_uengine.org"
+  templateFile: "shopmall_gateway.zip"
+  image: "gcr.io/eventstorming-tool/theia-ide-labs:3.9"
+  tenant: "msaez.io"
+  course: "cna-base"
+  lab: "gateway"
+  clazz: "cna-sk-winter-back"
+  email: "test@uengine.org"
+  zipUrl: "http://minio.msaez.io/labs-msaez.io/cna-base/labs/gateway/shopmall_gateway.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minio%2F20210106%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210106T201121Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=d8208ba2802b2f0b1654499c622edc965952e6a9bca1903472b3d43445e309a0"
+  configUrl: "http://minio-std.msaez.io/labs-msaez.io/cna-base/classes/running/cna-sk-winter-back/userConfig/test%40uengine.org/config?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minio%2F20210106%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210106T201524Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=7d3b752b941bbc0b95cdc571099d70677fec11818443c60918c285e1afb4ba59"
+  request:
+    memory: 3Gi
+    cpu: 2

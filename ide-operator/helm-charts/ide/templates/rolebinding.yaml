@@ -1,0 +1,14 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: {{ .Values.hashName }}
+  namespace: {{ .Values.hashName }}
+subjects:
+- kind: ServiceAccount
+  name: {{ .Values.hashName }}
+  namespace: {{ .Values.hashName }}
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: {{ .Values.hashName }}
+  apiGroup: ""

@@ -1,0 +1,79 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+  ##
+  ## Base operator rules
+  ##
+  # We need to manage Helm release secrets
+  - apiGroups:
+      - ""
+    resources:
+      - "namespaces"
+    verbs:
+      - "*"
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - "*"
+  # We need to create events on CRs about things happening during reconciliation
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+  ##
+  ## Rules for uengine.org/v1alpha1, Kind: Ide
+  ##
+  - apiGroups:
+      - uengine.org
+    resources:
+      - ides
+      - ides/status
+      - ides/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - verbs:
+      - "*"
+    apiGroups:
+      - ""
+    resources:
+      - "serviceaccounts"
+      - "services"
+      - "resourcequotas"
+      - "limitranges"
+  - verbs:
+      - "*"
+    apiGroups:
+      - "apps"
+    resources:
+      - "deployments"
+  - apiGroups:
+      - ""
+    resources:
+      - "pods"
+    verbs:
+      - "*"
+  - apiGroups:
+      - "rbac.authorization.k8s.io"
+    resources:
+      - "rolebindings"
+    verbs:
+      - "*"
+  - apiGroups:
+      - "rbac.authorization.k8s.io"
+    resources:
+      - "roles"
+    verbs:
+      - "*"
+# +kubebuilder:scaffold:rules

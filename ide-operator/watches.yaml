@@ -1,0 +1,6 @@
+# Use the 'create api' subcommand to add watches to this file.
+- group: uengine.org
+  version: v1alpha1
+  kind: Ide
+  chart: helm-charts/ide
+# +kubebuilder:scaffold:watch

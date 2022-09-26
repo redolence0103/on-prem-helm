@@ -1,0 +1,47 @@
+# Default values for on-prem-helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+image:
+  repository: "gcr.io/eventstorming-tool/eventstorming-ui-onprem"
+  pullPolicy: IfNotPresent
+  tag: "9.07"
+clusterAddress: {{ Cluster IP }} # Cluster Address - kubectl cluster-info
+defaultToken: # kubectl describe secrets default
+db:
+  host: www.{{ domain }} 
+  port: 443
+  name: mydb
+
+nameOverride: ""
+fullnameOverride: ""
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+service:
+  type: ClusterIP
+  port: 80
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+hosts:
+  domain: {{ domain }}
+
+gitlab:
+  certmanager-issuer:
+    email: jaeh@uengine.org
+  postgresql:
+    image:
+      tag: 13.6.0
+  global:
+    hosts:
+      domain: {{ domain }}
+  redis:
+    imagePullSecrets: []
+
+redis:
+  password: HeEJLoCprh
+

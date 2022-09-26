@@ -1,0 +1,199 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventstorming-ui
+  labels:
+    {{- include "on-prem-helm.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "on-prem-helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "on-prem-helm.selectorLabels" . | nindent 8 }}
+    spec:
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          env:
+            - name: VUE_APP_DB_HOST
+              value: "acebase.{{ domain }}"
+            - name: VUE_APP_DB_PORT
+              value: "443"
+            - name: VUE_APP_DB_NAME
+              value: "mydb"
+            - name: VUE_APP_CLUSTER_ADDRESS
+              value: "{{ Cluster IP }}"
+            - name: VUE_APP_MODE
+              value: "onprem"
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-server
+  labels:
+    name: api-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-server
+  template:
+    metadata:
+      labels:
+        app: api-server
+    spec:
+      containers:
+        - name: api-server
+          env:
+            - name: API_SERVER_URL
+              value: "{{ Cluster IP }}"
+            - name: API_SERVER_TOKEN
+              value: "{{ Cluster Default Token}}"
+            - name: API_SERVER_MAXIMUM
+              value: "999"
+          image: "gcr.io/eventstorming-tool/api-server-onprem:v5"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acebase
+  labels:
+    name: acebase
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acebase
+  template:
+    metadata:
+      labels:
+        app: acebase
+    spec:
+      containers:
+        - name: acebase
+          image: "gcr.io/eventstorming-tool/acebase:v24"
+          ports:
+            - name: http
+              containerPort: 5757
+              protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acebase-trigger
+  labels:
+    name: acebase-trigger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acebase-trigger
+  template:
+    metadata:
+      labels:
+        app: acebase-trigger
+    spec:
+      containers:
+        - name: acebase-trigger
+          image: "gcr.io/eventstorming-tool/acebase-onprem-trigger:v2"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-server
+  labels:
+    name: file-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: file-server
+  template:
+    metadata:
+      labels:
+        app: file-server
+    spec:
+      containers:
+        - name: file-server
+          image: "gcr.io/eventstorming-tool/file-server:v65"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+          - mountPath: /home/minio
+            name: data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: nfs
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ide-proxy
+  labels:
+    name: ide-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ide-proxy
+  template:
+    metadata:
+      labels:
+        app: ide-proxy
+    spec:
+      containers:
+        - name: ide-proxy
+          image: "gcr.io/eventstorming-tool/ide-proxy:v60"
+          ports:
+            - name: http
+              containerPort: 1338
+              protocol: TCP
