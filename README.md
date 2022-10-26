@@ -1,7 +1,7 @@
 # Using GCP Cluster
 
 ### 1. Clone helm Charts 
-  - [msa-ez/on-prem-helm](https://github.com/msa-ez/on-prem-helm)
+  - git clone https://github.com/msa-ez/on-prem-helm.git
 ---
 ### 2. Create & Connect GCP Cluster
 ---
