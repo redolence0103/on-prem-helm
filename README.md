@@ -1,4 +1,4 @@
-# Using GCP Cluster
+# Installing on-premise MSA-Easy
 
 ### 1. Clone helm Charts 
     git clone https://github.com/msa-ez/on-prem-helm.git
