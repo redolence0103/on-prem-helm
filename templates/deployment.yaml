@@ -24,13 +24,13 @@ spec:
         - name: {{ .Chart.Name }}
           env:
             - name: VUE_APP_DB_HOST
-              value: "acebase.{{ domain }}"
+              value: "acebase.dev-mheis2.hanwha.com"
             - name: VUE_APP_DB_PORT
               value: "443"
             - name: VUE_APP_DB_NAME
               value: "mydb"
             - name: VUE_APP_CLUSTER_ADDRESS
-              value: "{{ Cluster IP }}"
+              value: "https://94E21801E4D2B5042AFC08A92D6175C7.yl4.ap-northeast-2.eks.amazonaws.com"
             - name: VUE_APP_MODE
               value: "onprem"
           securityContext:
@@ -84,9 +84,9 @@ spec:
         - name: api-server
           env:
             - name: API_SERVER_URL
-              value: "{{ Cluster IP }}"
+              value: "https://94E21801E4D2B5042AFC08A92D6175C7.yl4.ap-northeast-2.eks.amazonaws.com"
             - name: API_SERVER_TOKEN
-              value: "{{ Cluster Default Token}}"
+              value: "eyJhbGciOiJSUzI1NiIsImtpZCI6IkRGYXBpN00xVEVqVXItNVRaWnZRV1hEckVDWld5aUJqSDJKY0VrZ0FYZFUifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJhbmFseXNpcyIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJkZWZhdWx0LXRva2VuLWx6cXdjIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImRlZmF1bHQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiI3ZDc2NjJiZC0yYmIwLTQ1NTUtOGMwYS00ZDAzMDgyMDNhNzIiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6YW5hbHlzaXM6ZGVmYXVsdCJ9.nN381-cw4D0uQkJxUnQ9fKhNP7izurzFhoPrwHEHd9vFetxwnvCNaMBKwRTXvUH_NX7QX8j99ryHZ5cW3PSIbS8a2d1CcputtGArfulTMoM1mAdFDkJ7BMBNpLW1w6Sex2RBB3MF237EjCTRD7IPDeXwz3hWkXVV86ySav0bbXmP0sowm9UlH1LllmwUrhh9aOANucjcH-nEyilmdelLdvm1fbOncKSLSjWI_1yQan6sf_N7-o4TnwtJBcgaQsH5LR8wWIyJm2U3S15UwybIFCmdFMnUx7vbEtS1GmWbhbsUkDOM-d5RWuf-YVLSgiBKytOAGMHDVZdr22oJc5sKew"
             - name: API_SERVER_MAXIMUM
               value: "999"
           image: "gcr.io/eventstorming-tool/api-server-onprem:v5"
