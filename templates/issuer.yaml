@@ -1,26 +1,26 @@
-apiVersion: cert-manager.io/v1
-kind: Issuer
-metadata:
- name: onprem-issuer
- namespace: default
- resourceVersion: "186159"
- uid: 160c31a8-b3fe-4c2b-b240-35b5db266194
-spec:
- acme:
-   email: help@uengine.org
-   preferredChain: ""
-   privateKeySecretRef:
-     name: letsencrypt-prod
-   server: https://acme-v02.api.letsencrypt.org/directory
-   solvers:
-   - dns01:
-       route53: # AWS Route53 기준
-         accessKeyID: {{ accessKeyID }} # IAM KEY
-         region: {{ region }}
-         role: {{ role }}
-         secretAccessKeySecretRef: # IAM SECRET
-           key: secretAccessKey
-           name: aws-access-key
-     selector:
-       dnsZones:
-       - "{{ domain }}"
+# apiVersion: cert-manager.io/v1
+# kind: Issuer
+# metadata:
+#  name: onprem-issuer
+#  namespace: default
+#  resourceVersion: "186159"
+#  uid: 160c31a8-b3fe-4c2b-b240-35b5db266194
+# spec:
+#  acme:
+#    email: help@uengine.org
+#    preferredChain: ""
+#    privateKeySecretRef:
+#      name: letsencrypt-prod
+#    server: https://acme-v02.api.letsencrypt.org/directory
+#    solvers:
+#    - dns01:
+#        route53: # AWS Route53 기준
+#          accessKeyID: AKIA256YZ76VV4E26N3X # IAM KEY
+#          region: ap-northeast-2
+#          role: arn:aws:iam::751537094571:role/cert-manager
+#          secretAccessKeySecretRef: # IAM SECRET
+#            key: secretAccessKey
+#            name: aws-access-key
+#      selector:
+#        dnsZones:
+#        - "dev-mheis2.hanwha.com"
