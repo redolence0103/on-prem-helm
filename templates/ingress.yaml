@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: '*.{{ domain }}'
+  - host: '*.dev-mheis2.hanwha.com'
     http:
       paths:
       - backend:
@@ -19,7 +19,7 @@ spec:
               number: 1338
         path: /
         pathType: Prefix
-  - host: www.{{ domain }}
+  - host: www.dev-mheis2.hanwha.com
     http:
       paths:
       - backend:
@@ -29,7 +29,7 @@ spec:
               number: 80
         path: /
         pathType: Prefix
-  - host: acebase.{{ domain }}
+  - host: acebase.dev-mheis2.hanwha.com
     http:
       paths:
       - backend:
@@ -39,7 +39,7 @@ spec:
               number: 5757
         path: /
         pathType: Prefix
-  - host: api.{{ domain }}
+  - host: api.dev-mheis2.hanwha.com
     http:
       paths:
       - backend:
@@ -49,7 +49,7 @@ spec:
               number: 8080
         path: /
         pathType: Prefix
-  - host: file.{{ domain }}
+  - host: file.dev-mheis2.hanwha.com
     http:
       paths:
       - backend:
@@ -61,5 +61,5 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-    - '*.{{ domain }}'
+    - '*.dev-mheis2.hanwha.com'
     secretName: onprem-tls
