@@ -44,7 +44,7 @@ spec:
       containers:
       - env:
         - name: VUE_APP_DB_HOST
-          value: acebase.uengine.solutions
+          value: acebase.dev-mheis2.hanwha.com
         - name: VUE_APP_DB_PORT
           value: "443"
         - name: VUE_APP_DB_NAME
@@ -52,7 +52,7 @@ spec:
         - name: VUE_APP_MODE
           value: onprem
         - name: VUE_APP_CLUSTER_ADDRESS
-          value: https://34.64.113.207
+          value: https://94E21801E4D2B5042AFC08A92D6175C7.yl4.ap-northeast-2.eks.amazonaws.com
         image: gcr.io/eventstorming-tool/eventstorming-ui-onprem:9.07
         imagePullPolicy: IfNotPresent
         livenessProbe:
