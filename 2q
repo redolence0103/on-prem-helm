@@ -1,0 +1,108 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "54"
+    meta.helm.sh/release-name: on-prem
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2022-08-17T05:53:22Z"
+  generation: 54
+  labels:
+    app.kubernetes.io/instance: on-prem
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: on-prem-helm
+    app.kubernetes.io/version: 1.16.0
+    helm.sh/chart: on-prem-helm-0.1.0
+  name: eventstorming-ui
+  namespace: default
+  resourceVersion: "12118958"
+  uid: 807536bc-f651-4cf8-8f35-6c1b344318ec
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: on-prem
+      app.kubernetes.io/name: on-prem-helm
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: on-prem
+        app.kubernetes.io/name: on-prem-helm
+    spec:
+      containers:
+      - env:
+        - name: VUE_APP_DB_HOST
+          value: acebase.uengine.solutions
+        - name: VUE_APP_DB_PORT
+          value: "443"
+        - name: VUE_APP_DB_NAME
+          value: mydb
+        - name: VUE_APP_MODE
+          value: onprem
+        - name: VUE_APP_CLUSTER_ADDRESS
+          value: https://34.64.113.207
+        image: gcr.io/eventstorming-tool/eventstorming-ui-onprem:9.07
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: http
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: on-prem-helm
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: http
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources: {}
+        securityContext: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2022-08-17T07:21:22Z"
+    lastUpdateTime: "2022-08-17T07:21:22Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2022-08-17T05:53:22Z"
+    lastUpdateTime: "2022-09-02T08:43:08Z"
+    message: ReplicaSet "eventstorming-ui-bb6f79cfb" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 54
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
