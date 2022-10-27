@@ -7,10 +7,10 @@ image:
   repository: "gcr.io/eventstorming-tool/eventstorming-ui-onprem"
   pullPolicy: IfNotPresent
   tag: "9.07"
-clusterAddress: {{ Cluster IP }} # Cluster Address - kubectl cluster-info
+clusterAddress: https://94E21801E4D2B5042AFC08A92D6175C7.yl4.ap-northeast-2.eks.amazonaws.com # Cluster Address - kubectl cluster-info
 defaultToken: # kubectl describe secrets default
 db:
-  host: www.{{ domain }} 
+  host: www.dev-mheis2.hanwha.com
   port: 443
   name: mydb
 
@@ -28,7 +28,7 @@ tolerations: []
 affinity: {}
 
 hosts:
-  domain: {{ domain }}
+  domain: dev-mheis2.hanwha.com
 
 gitlab:
   certmanager-issuer:
@@ -38,7 +38,7 @@ gitlab:
       tag: 13.6.0
   global:
     hosts:
-      domain: {{ domain }}
+      domain: dev-mheis2.hanwha.com
   redis:
     imagePullSecrets: []
 
