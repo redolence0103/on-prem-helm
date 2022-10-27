@@ -1,0 +1,85 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: redis-master
+  labels:
+    app: redis
+spec:
+  selector:
+    matchLabels:
+      app: redis
+      role: master
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis
+        role: master
+        tier: backend
+    spec:
+      containers:
+        - name: master
+          image: k8s.gcr.io/redis:e2e # or just image: redis
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          ports:
+            - containerPort: 6379
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ide-proxy
+  labels:
+    app: ide-proxy
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: ide-proxy
+  template:
+    metadata:
+      labels:
+        app: ide-proxy
+    spec:
+      containers:
+        - name: ide-proxy
+          image: gcr.io/eventstorming-tool/ide-proxy:v31
+          securityContext:
+            privileged: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-server
+  labels:
+    app: file-server
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: file-server
+  template:
+    metadata:
+      labels:
+        app: file-server
+    spec:
+      containers:
+        - name: file-server
+          image: gcr.io/eventstorming-tool/file-server:v64
+          volumeMounts:
+            - name: data
+              mountPath: /home/minio
+            - name: cors-config
+              mountPath: /etc/config
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: nfs
+        - name: cors-config
+          configMap:
+            name: cors-demo

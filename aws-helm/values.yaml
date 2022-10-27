@@ -1,0 +1,5 @@
+nfsServer:
+    provisionerName: nfs
+    fsId: fs-06d722c672442c3f8
+    region: ap-northeast-2
+    serverUrl: fs-06d722c672442c3f8.efs.ap-northeast-2.amazonaws.com

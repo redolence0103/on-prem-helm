@@ -1,0 +1,14 @@
+apiVersion: v1
+description: Build Education Server 
+name: aws-msaez
+version: 2
+appVersion: master
+keywords:
+- Education
+- Labs
+home: https://uEngine.org
+sources:
+- https://source.cloud.google.com/eventstorming-tool
+maintainers:
+- name: Kim Sanghoon
+  email: sanghoon01@uengine.org
